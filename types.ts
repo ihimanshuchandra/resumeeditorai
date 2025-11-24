@@ -1,3 +1,4 @@
+
 export interface ResumeData {
   personalInfo: {
     fullName: string;
@@ -43,6 +44,14 @@ export enum Industry {
   FINANCE = 'Finance',
   CREATIVE = 'Creative',
   HEALTHCARE = 'Healthcare',
+  MARKETING = 'Marketing',
+  ENGINEERING = 'Engineering',
+  SALES = 'Sales',
+  EDUCATION = 'Education',
+  LEGAL = 'Legal',
+  CUSTOMER_SERVICE = 'Customer Service',
+  REAL_ESTATE = 'Real Estate',
+  HR = 'Human Resources',
 }
 
 export interface GenerationState {

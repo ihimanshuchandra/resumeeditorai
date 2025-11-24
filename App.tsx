@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { ResumeData, ResumeStyle, Industry, GenerationState } from './types';
 import { parseResumeText } from './services/geminiService';
@@ -20,6 +21,23 @@ const INITIAL_DATA: ResumeData = {
   experience: [],
   education: [],
   skills: ["Skill 1", "Skill 2"]
+};
+
+// Map industries to emojis for UI
+const INDUSTRY_ICONS: Record<Industry, string> = {
+  [Industry.GENERAL]: '🌐',
+  [Industry.TECH]: '💻',
+  [Industry.FINANCE]: '💰',
+  [Industry.CREATIVE]: '🎨',
+  [Industry.HEALTHCARE]: '🏥',
+  [Industry.MARKETING]: '📣',
+  [Industry.ENGINEERING]: '⚙️',
+  [Industry.SALES]: '📈',
+  [Industry.EDUCATION]: '🎓',
+  [Industry.LEGAL]: '⚖️',
+  [Industry.CUSTOMER_SERVICE]: '🎧',
+  [Industry.REAL_ESTATE]: '🏠',
+  [Industry.HR]: '👥',
 };
 
 // Monetization Modal
@@ -332,14 +350,11 @@ const App: React.FC = () => {
         <PremiumModal isOpen={showProModal} onClose={() => setShowProModal(false)} />
 
         <main className="flex-1 overflow-y-auto px-4 py-8 md:p-6 relative z-10">
-          <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16 items-center min-h-[calc(100vh-140px)]">
+          <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16 items-center min-h-[calc(100vh-140px)]">
             
             {/* Left Content */}
             <div className="space-y-6 md:space-y-8 animate-fade-in text-center lg:text-left">
               <div>
-                <span className="inline-block px-4 py-1.5 rounded-full bg-brand-100 text-brand-700 text-sm font-semibold mb-6 border border-brand-200">
-                  Powered by Gemini 2.0
-                </span>
                 <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-tight tracking-tight mb-4 md:mb-6">
                   Craft your perfect <br/>
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-indigo-500">Resume instantly.</span>
@@ -349,21 +364,24 @@ const App: React.FC = () => {
                 </p>
               </div>
 
-              <div className="flex flex-col gap-3 max-w-sm mx-auto lg:mx-0 text-left">
-                 <label className="text-sm font-medium text-slate-700 ml-1">Select Target Industry</label>
-                 <div className="relative">
-                   <select 
-                    className="w-full appearance-none rounded-xl border-slate-200 bg-white py-3 px-4 pr-8 text-slate-700 shadow-sm focus:border-brand-500 focus:ring-brand-500 transition-shadow cursor-pointer"
-                    value={selectedIndustry}
-                    onChange={(e) => setSelectedIndustry(e.target.value as Industry)}
-                   >
-                     {Object.values(Industry).map(ind => (
-                       <option key={ind} value={ind}>{ind}</option>
-                     ))}
-                   </select>
-                   <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-500">
-                     <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
-                   </div>
+              {/* Enhanced Visual Industry Selection */}
+              <div className="max-w-lg mx-auto lg:mx-0 text-left">
+                 <label className="text-sm font-bold text-slate-700 ml-1 mb-3 block uppercase tracking-wide">Select your Target Industry</label>
+                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-[180px] overflow-y-auto pr-2 no-scrollbar">
+                   {Object.values(Industry).map((ind) => (
+                     <button
+                       key={ind}
+                       onClick={() => setSelectedIndustry(ind)}
+                       className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border text-sm font-medium transition-all text-left ${
+                         selectedIndustry === ind
+                           ? 'bg-brand-50 border-brand-500 text-brand-800 ring-1 ring-brand-500 shadow-sm'
+                           : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-brand-300'
+                       }`}
+                     >
+                       <span>{INDUSTRY_ICONS[ind] || '🌐'}</span>
+                       <span className="truncate">{ind}</span>
+                     </button>
+                   ))}
                  </div>
               </div>
             </div>
@@ -528,9 +546,22 @@ const App: React.FC = () => {
                 <h2 className="text-xl md:text-2xl font-bold text-slate-800 tracking-tight">Your Details</h2>
                 <p className="text-xs md:text-sm text-slate-500 mt-1">Refine the AI-generated content below.</p>
               </div>
-              <span className="text-[10px] md:text-xs px-2 md:px-3 py-1 bg-brand-50 text-brand-700 rounded-full font-bold border border-brand-100 uppercase tracking-wider whitespace-nowrap">
-                Target: {selectedIndustry}
-              </span>
+              
+              {/* Functional Industry Selector Dropdown */}
+              <div className="relative group">
+                <select 
+                  className="appearance-none bg-brand-50 text-brand-800 text-[10px] md:text-xs font-bold border border-brand-200 rounded-full py-1.5 pl-3 pr-6 uppercase tracking-wider cursor-pointer hover:bg-brand-100 hover:border-brand-300 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500"
+                  value={selectedIndustry}
+                  onChange={(e) => setSelectedIndustry(e.target.value as Industry)}
+                >
+                  {Object.values(Industry).map((ind) => (
+                    <option key={ind} value={ind}>{ind}</option>
+                  ))}
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-brand-600">
+                  <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+              </div>
             </div>
             <EditorSection 
               data={resumeData} 
