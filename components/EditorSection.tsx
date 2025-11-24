@@ -1,8 +1,8 @@
+
 import React from 'react';
 import { ResumeData, Industry } from '../types';
 import { Button } from './Button';
 import { improveText } from '../services/geminiService';
-import { MONETIZATION_CONFIG } from '../config';
 
 interface EditorProps {
   data: ResumeData;
@@ -54,62 +54,6 @@ const TextAreaWithAI: React.FC<{
         ✨ Enhance with AI
       </Button>
     </div>
-  </div>
-);
-
-// Monetization Component: Affiliate/Ad Placeholder
-const CareerToolkit: React.FC = () => (
-  <div className="mt-8 bg-slate-900 rounded-xl p-5 text-white shadow-lg overflow-hidden relative border border-slate-800">
-    <div className="relative z-10">
-      <h3 className="font-bold text-lg mb-2 flex items-center">
-        Recommended Tools
-      </h3>
-      <p className="text-slate-400 text-sm mb-4">Supercharge your job search with our partners.</p>
-      <div className="space-y-3">
-        <a 
-          href={MONETIZATION_CONFIG.affiliate.resumeReview} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="block bg-white/5 hover:bg-white/10 transition-colors p-3 rounded-lg flex items-center gap-3 group relative overflow-hidden border border-white/5"
-        >
-          <div className="w-10 h-10 rounded bg-blue-600 flex items-center justify-center text-xl shadow-lg shadow-blue-500/30">📝</div>
-          <div>
-             <div className="text-sm font-bold text-white group-hover:text-blue-300 transition-colors">Free Resume Review</div>
-             <div className="text-[11px] text-slate-400">Expert feedback within 24h</div>
-          </div>
-          <div className="absolute top-2 right-2 text-[10px] bg-slate-800 text-slate-400 px-1.5 rounded opacity-60">Ad</div>
-        </a>
-        <a 
-          href={MONETIZATION_CONFIG.affiliate.linkedinOptimization} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="block bg-white/5 hover:bg-white/10 transition-colors p-3 rounded-lg flex items-center gap-3 group relative overflow-hidden border border-white/5"
-        >
-          <div className="w-10 h-10 rounded bg-purple-600 flex items-center justify-center text-xl shadow-lg shadow-purple-500/30">🚀</div>
-          <div>
-             <div className="text-sm font-bold text-white group-hover:text-purple-300 transition-colors">LinkedIn Optimization</div>
-             <div className="text-[11px] text-slate-400">Increase profile views by 500%</div>
-          </div>
-           <div className="absolute top-2 right-2 text-[10px] bg-slate-800 text-slate-400 px-1.5 rounded opacity-60">Ad</div>
-        </a>
-        <a 
-          href={MONETIZATION_CONFIG.affiliate.jobBoard} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="block bg-white/5 hover:bg-white/10 transition-colors p-3 rounded-lg flex items-center gap-3 group relative overflow-hidden border border-white/5"
-        >
-          <div className="w-10 h-10 rounded bg-emerald-600 flex items-center justify-center text-xl shadow-lg shadow-emerald-500/30">💼</div>
-          <div>
-             <div className="text-sm font-bold text-white group-hover:text-emerald-300 transition-colors">Remote Job Board</div>
-             <div className="text-[11px] text-slate-400">Direct hiring links</div>
-          </div>
-           <div className="absolute top-2 right-2 text-[10px] bg-slate-800 text-slate-400 px-1.5 rounded opacity-60">Ad</div>
-        </a>
-      </div>
-    </div>
-    {/* Decorative background */}
-    <div className="absolute top-[-50%] right-[-20%] w-48 h-48 bg-brand-600 rounded-full blur-3xl opacity-10"></div>
-    <div className="absolute bottom-[-20%] left-[-20%] w-32 h-32 bg-blue-600 rounded-full blur-3xl opacity-10"></div>
   </div>
 );
 
@@ -291,9 +235,6 @@ export const EditorSection: React.FC<EditorProps> = ({ data, onChange, industry 
           />
         </div>
       </Section>
-
-      {/* Monetization / Native Ad Section */}
-      <CareerToolkit />
     </div>
   );
 };

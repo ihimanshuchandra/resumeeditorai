@@ -40,63 +40,9 @@ const INDUSTRY_ICONS: Record<Industry, string> = {
   [Industry.HR]: '👥',
 };
 
-// Monetization Modal
-const PremiumModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
-  if (!isOpen) return null;
-  return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={onClose}></div>
-      <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden animate-slide-up">
-        <div className="bg-gradient-to-r from-brand-600 to-indigo-600 p-6 text-white text-center">
-          <h2 className="text-2xl font-bold mb-1">Go Pro 🚀</h2>
-          <p className="text-brand-100 text-sm">Unlock the full potential of your career.</p>
-        </div>
-        <div className="p-6 space-y-6">
-          <div className="space-y-4">
-            <div className="flex items-start gap-3">
-              <div className="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-xs">✓</div>
-              <div>
-                <h4 className="font-semibold text-slate-900">Unlimited AI Enhancements</h4>
-                <p className="text-xs text-slate-500">Perfect every bullet point with smart AI.</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <div className="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-xs">✓</div>
-              <div>
-                <h4 className="font-semibold text-slate-900">Premium Templates</h4>
-                <p className="text-xs text-slate-500">Access exclusive Harvard & Creative styles.</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <div className="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-xs">✓</div>
-              <div>
-                <h4 className="font-semibold text-slate-900">Cover Letter Generator</h4>
-                <p className="text-xs text-slate-500">Auto-generate matching cover letters.</p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="bg-slate-50 p-4 rounded-lg text-center border border-slate-100">
-             <p className="text-2xl font-bold text-slate-900">$9.99<span className="text-sm font-normal text-slate-500">/mo</span></p>
-             <p className="text-xs text-slate-400 mt-1">Cancel anytime.</p>
-          </div>
-
-          <div className="space-y-3">
-            <Button className="w-full py-3" onClick={() => window.open(MONETIZATION_CONFIG.payment.stripeCheckoutUrl, '_blank')}>
-              Upgrade Now
-            </Button>
-            <Button variant="ghost" className="w-full text-slate-500 text-sm" onClick={onClose}>
-              Maybe later
-            </Button>
-          </div>
-          
-          <div className="pt-2 text-center border-t border-slate-100">
-            <p className="text-xs text-slate-400">Love the free tool? <a href={MONETIZATION_CONFIG.payment.buyMeCoffeeUrl} target="_blank" rel="noreferrer" className="text-brand-600 hover:underline">Buy us a coffee ☕</a></p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+// Helper to prevent opening placeholder links
+const safeOpen = (url: string) => {
+  window.open(url, '_blank');
 };
 
 // Affiliate / Download Interstitial Modal (Ad Logic)
@@ -142,7 +88,7 @@ const DownloadModal: React.FC<{ isOpen: boolean; onClose: () => void; onConfirm:
           {/* The Large Ad Unit */}
           <div 
             className="bg-slate-50 border border-slate-200 rounded-xl overflow-hidden mb-6 relative group cursor-pointer hover:shadow-md transition-shadow"
-            onClick={() => window.open(MONETIZATION_CONFIG.ads.downloadModalAdUrl, '_blank')}
+            onClick={() => safeOpen(MONETIZATION_CONFIG.ads.downloadModalAdUrl)}
           >
              <div className="relative h-40 bg-slate-200 overflow-hidden">
                 <img 
@@ -211,7 +157,6 @@ const App: React.FC = () => {
   });
   
   // Monetization State
-  const [showProModal, setShowProModal] = useState(false);
   const [showDownloadModal, setShowDownloadModal] = useState(false);
   
   // Mobile View State
@@ -339,15 +284,8 @@ const App: React.FC = () => {
             <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-tr from-brand-600 to-indigo-500 rounded-xl shadow-lg shadow-brand-500/20 flex items-center justify-center text-white font-bold text-lg md:text-xl shrink-0">R</div>
             <span className="font-bold text-lg md:text-xl text-slate-900 tracking-tight hidden sm:inline">Resume Editor AI</span>
           </div>
-          <div className="flex gap-4">
-             <button onClick={() => setShowProModal(true)} className="text-sm font-semibold text-brand-700 hover:text-brand-800 transition-colors">
-               Pricing
-             </button>
-             <a href="#" className="text-sm font-medium text-slate-500 hover:text-brand-600 transition-colors">Login</a>
-          </div>
+          {/* Removing Auth/Pricing Nav */}
         </nav>
-        
-        <PremiumModal isOpen={showProModal} onClose={() => setShowProModal(false)} />
 
         <main className="flex-1 overflow-y-auto px-4 py-8 md:p-6 relative z-10">
           <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16 items-center min-h-[calc(100vh-140px)]">
@@ -483,7 +421,6 @@ const App: React.FC = () => {
   return (
     <div className="h-[100dvh] flex flex-col bg-slate-100 font-sans overflow-hidden">
       {/* Modals */}
-      <PremiumModal isOpen={showProModal} onClose={() => setShowProModal(false)} />
       <DownloadModal isOpen={showDownloadModal} onClose={() => setShowDownloadModal(false)} onConfirm={executePrint} />
 
       {/* Header */}
@@ -513,17 +450,6 @@ const App: React.FC = () => {
            
            <div className="h-6 w-px bg-slate-200 mx-1 hidden sm:block"></div>
            
-           {/* Go Pro Button (Monetization) */}
-           <button 
-            onClick={() => setShowProModal(true)}
-            className="hidden sm:flex items-center gap-1.5 bg-gradient-to-r from-orange-400 to-orange-500 text-white px-3 py-1.5 rounded-lg text-sm font-bold shadow-sm hover:shadow-md transition-all hover:scale-105"
-           >
-             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-               <path fillRule="evenodd" d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 5a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1V8a1 1 0 011-1zm5-5a1 1 0 110 2h5a1 1 0 010 2h-5a1 1 0 110-2h5a1 1 0 010-2h-5z" clipRule="evenodd" />
-             </svg>
-             Go Pro
-           </button>
-
            <Button onClick={handlePrintRequest} variant="primary" size="sm" className="whitespace-nowrap px-3 shadow-brand-500/20">
              <span className="hidden sm:inline mr-2">Download PDF</span>
              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
