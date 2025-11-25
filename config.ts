@@ -17,5 +17,17 @@ export const MONETIZATION_CONFIG = {
     downloadModalAdTitle: "Ace Your Interview",
     downloadModalAdDescription: "Get 1-on-1 coaching with expert mentors.",
     downloadModalAdLabel: "SPONSORED",
+  },
+
+  // =================================================================
+  // 📊 TRAFFIC DATA (Google Analytics)
+  // =================================================================
+  analytics: {
+    // INSTRUCTIONS:
+    // 1. Go to analytics.google.com and sign in.
+    // 2. Create a property and choose "Web".
+    // 3. Copy the "Measurement ID" (It looks like 'G-123456789').
+    // 4. Paste it inside the quotes below.
+    googleAnalyticsId: "G-PE2EH7ETNS", 
   }
 };

@@ -168,6 +168,28 @@ const App: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Initialize Analytics
+  useEffect(() => {
+    const gaId = MONETIZATION_CONFIG.analytics.googleAnalyticsId;
+    if (gaId && gaId.length > 5) {
+      const scriptUrl = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
+      if (!document.querySelector(`script[src="${scriptUrl}"]`)) {
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = scriptUrl;
+        document.head.appendChild(script);
+
+        // Initialize Global Site Tag
+        (window as any).dataLayer = (window as any).dataLayer || [];
+        function gtag(...args: any[]) {
+          (window as any).dataLayer.push(args);
+        }
+        gtag('js', new Date());
+        gtag('config', gaId);
+      }
+    }
+  }, []);
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setSelectedFile(e.target.files[0]);
@@ -300,6 +322,17 @@ const App: React.FC = () => {
                 <p className="text-sm md:text-lg text-slate-600 leading-relaxed max-w-lg mx-auto lg:mx-0">
                   Upload your old resume in any format. Our AI extracts the details, polishes your content, and styles it for your dream job.
                 </p>
+                
+                {/* Privacy Badge */}
+                <div className="flex items-center justify-center lg:justify-start gap-3 mt-5">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 shadow-sm transition-transform hover:scale-105">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+                      <path fillRule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clipRule="evenodd" />
+                    </svg>
+                    <span className="text-xs font-bold">Privacy First</span>
+                  </div>
+                  <span className="text-xs font-medium text-slate-500">Your data is private & never stored on servers.</span>
+                </div>
               </div>
 
               {/* Enhanced Visual Industry Selection */}
